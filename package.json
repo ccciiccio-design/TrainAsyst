@@ -22,8 +22,7 @@
     "react-native-web": "^0.19.13"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0",
-    "@expo/webpack-config": "^19.0.1"
+    "@babel/core": "^7.20.0"
   },
   "private": true
 }
