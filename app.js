@@ -6,7 +6,7 @@ import {
   Image,
   Linking,
   Modal,
-  Platform,
+  Platform, // <-- Assicurati che sia presente per il controllo del Web
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -15,19 +15,41 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+
 /* ===== 1. CONFIGURAZIONE SUPABASE ===== */
 import { createClient } from '@supabase/supabase-js';
 import 'react-native-url-polyfill/auto';
-
-// Usiamo variabili diverse per evitare conflitti di cache
+// Configurazione URL e Chiavi
 const S_URL = 'https://orqgstmwfiachzkzbgmk.supabase.co'.trim();
 const S_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ycWdzdG13ZmlhY2h6a3piZ21rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1NzEzNDgsImV4cCI6MjA5MzE0NzM0OH0.wA53JFyLznepo4DPZi0ydO5VQOm1Bhr_z_hAQHAxruY'.trim();
 
-const supabase = createClient(S_URL, S_KEY);
+// Creiamo un oggetto di configurazione sicuro per i due mondi
+const supabaseConfig = {
+  auth: {
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: false,
+  },
+};
+// Se siamo su mobile usa async-storage, se siamo sul web usa il localStorage del browser
+if (Platform.OS === 'web') {
+  supabaseConfig.auth.storage = window.localStorage;
+} else {
+  // Lo importiamo dinamicamente solo se serve (evita crash su web)
+  const AsyncStorage = require('@react-native-async-storage/async-storage').default;
+  supabaseConfig.auth.storage = AsyncStorage;
+}
+// Unica inizializzazione sicura sia per Mobile che per Web
+export const supabase = createClient(S_URL, S_KEY, {
+  auth: {
+    storage: Platform.OS === 'web' ? window.localStorage : AsyncStorage,
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: false,
+  },
+});
 
-const LOGO_URL =
-'https://orqgstmwfiachzkzbgmk.supabase.co/storage/v1/object/sign/logo/New%20Logo%20sfondo%20trasp.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9lZWE4ZDM4ZC05MDc0LTQxYjYtYWVkZC1lM2QwYTNjOTFkMDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJsb2dvL05ldyBMb2dvIHNmb25kbyB0cmFzcC5wbmciLCJpYXQiOjE3Nzc2NjQ4MTgsImV4cCI6NDg5OTcyODgxOH0.HOVHDT_avz6j6t9Nxp5_cGT-fXxnqAW_zhMmacCqSs0';
-
+const LOGO_URL = 'https://orqgstmwfiachzkzbgmk.supabase.co/storage/v1/object/sign/logo/New%20Logo%20sfondo%20trasp.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9lZWE4ZDM4ZC05MDc0LTQxYjYtYWVkZC1lM2QwYTNjOTFkMDIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJsb2dvL05ldyBMb2dvIHNmb25kbyB0cmFzcC5wbmciLCJpYXQiOjE3Nzc2NjQ4MTgsImV4cCI6NDg5OTcyODgxOH0.HOVHDT_avz6j6t9Nxp5_cGT-fXxnqAW_zhMmacCqSs0';
 const TABS = {
   HOME: 'HOME',
   CLIENTS: 'CLIENTS',

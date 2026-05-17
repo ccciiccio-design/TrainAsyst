@@ -14,25 +14,10 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.ciccio.TrainAsyst"
-    },
-    "android": {
-      "package": "com.ciccio.TrainAsyst",
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
-    },
     "web": {
-      "favicon": "./assets/favicon.png",
       "bundler": "metro",
-      "description": "App per la gestione atleti e allenamenti",
-      "shortName": "TrainAsyst"
-    },
-    "plugins": [
-      "@react-native-community/datetimepicker"
-    ]
+      "output": "static",
+      "baseUrl": ""
+    }
   }
 }
