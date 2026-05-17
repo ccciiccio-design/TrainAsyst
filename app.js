@@ -42,7 +42,7 @@ if (Platform.OS === 'web') {
 // Unica inizializzazione sicura sia per Mobile che per Web
 export const supabase = createClient(S_URL, S_KEY, {
   auth: {
-    storage: Platform.OS === 'web' ? window.localStorage : AsyncStorage,
+storage: typeof window !== 'undefined' ? window.localStorage : undefined,
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: false,

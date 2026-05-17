@@ -14,10 +14,14 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "web": {
-      "bundler": "metro",
-      "output": "static",
-      "baseUrl": ""
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
     }
   }
 }
